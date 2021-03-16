@@ -19,6 +19,7 @@ func RadioMenu(stations []stationRecord) *wmenu.Menu {
 			fmt.Printf("Streaming: '" + opts[0].Text + "' at url - "+ val +"\n")
 			stdout, _ := subExecute(player(), options(), val)
 			fmt.Println(stdout)
+			menu.Run()
 			return nil
 		})
 	for _, station := range stations {
