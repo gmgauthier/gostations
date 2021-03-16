@@ -37,12 +37,12 @@ func main(){
 	}
 
 	stations, _ := StationSearch(name, country, state, tags, notok)
-	for _, station := range stations {
-		fmt.Printf("%+v\n", station)
+
+	menu := RadioMenu(stations)
+	err := menu.Run()
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
 	}
-	fmt.Println(len(stations))
-
-	//mainMenu = RadioMenu(station_list)
-
 
 }
