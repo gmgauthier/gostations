@@ -39,5 +39,7 @@ func main(){
 		fmt.Printf("%+v\n", station)
 	}
 
+	//mainMenu = RadioMenu(station_list)
+
 
 }
