@@ -14,11 +14,12 @@ func main(){
 		country string
 		state 	string
 		tags 	string
+		notok   bool
 	)
 	flag.Usage = func() {
 		fmt.Printf("Usage: \n")
 		fmt.Printf(" gostations ")
-		fmt.Printf(" [-n \"name\"]  [-c \"home country\"]  [-s \"home state\"]  [-t \"ordered,tag,list\"]\n")
+		fmt.Printf(" [-n \"name\"]  [-c \"home country\"]  [-s \"home state\"]  [-t \"ordered,tag,list\"] [-x]\n")
 		flag.PrintDefaults()
 		fmt.Printf("  -h (or none)\n")
 		fmt.Printf("\tThis help message\n")
@@ -27,17 +28,19 @@ func main(){
 	flag.StringVar(&country, "c", "", "Home country.")
 	flag.StringVar(&state, "s", "", "Home state (if in the United States).")
 	flag.StringVar(&tags, "t", "", "Tag (or comma-separated tag list)")
+	flag.BoolVar(&notok, "x", false,"If toggled, will show stations that are down")
 	flag.Parse()
 
 	if argCount == 0 {
 		flag.Usage()
+		os.Exit(0)
 	}
 
-	stations, _ := StationSearch(name, country, state, tags)
-	fmt.Println(len(stations))
+	stations, _ := StationSearch(name, country, state, tags, notok)
 	for _, station := range stations {
 		fmt.Printf("%+v\n", station)
 	}
+	fmt.Println(len(stations))
 
 	//mainMenu = RadioMenu(station_list)
 

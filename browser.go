@@ -70,7 +70,7 @@ func pruneStations(stations []stationRecord) []stationRecord {
 	return filteredStations
 }
 
-func StationSearch(name string, country string, state string, tags string) ([]stationRecord, error) {
+func StationSearch(name string, country string, state string, tags string, notok bool) ([]stationRecord, error) {
 	params := url.Values{}
 	if name != ""{
 		params.Add("name", name)
@@ -89,6 +89,9 @@ func StationSearch(name string, country string, state string, tags string) ([]st
 	if err != nil{
 		return nil, err
 	}
+	if notok{
+		return stations, err
+	} // otherwise prune the list
 	prunedStations := pruneStations(stations) // eliminate stations that are reporting down.
 	return prunedStations, err
 }
