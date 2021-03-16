@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"net"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -17,9 +18,8 @@ type stationRecord struct {
 	Countrycode string `json:"countrycode"`
 	Tags        string `json:"tags"`
 	Url         string `json:"url"`
-	Lastcheck   int `json:"lastcheck"`
+	Lastcheck   int `json:"lastcheckok"`
 }
-
 
 func RandomIP(iplist []net.IP) net.IP {
 	rand.Seed(time.Now().Unix())
@@ -45,7 +45,7 @@ func GetApiHost() string {
 }
 
 func GetStations(qstring string) ([]stationRecord, error){
-	urlstr := fmt.Sprintf("https://%s/json/stations/search?%s&limit=100000",GetApiHost(),qstring)
+	urlstr := fmt.Sprintf("https://%s/json/stations/search?%s&limit=%d",GetApiHost(),qstring,maxitems())
 	resp, err := http.Get(urlstr)
 	if err != nil {
 		log.Printf(err.Error())
@@ -58,6 +58,39 @@ func GetStations(qstring string) ([]stationRecord, error){
 		return data, err
 	}
 	return data, err
+}
+
+func pruneStations(stations []stationRecord) []stationRecord {
+	filteredStations := stations[:0]
+	for _, station := range stations {
+		if station.Lastcheck == 1 {
+			filteredStations = append(filteredStations, station)
+		}
+	}
+	return filteredStations
+}
+
+func StationSearch(name string, country string, state string, tags string) ([]stationRecord, error) {
+	params := url.Values{}
+	if name != ""{
+		params.Add("name", name)
+	}
+	if country != "" {
+		params.Add("country", country)
+	}
+	if state != ""{
+		params.Add("state", state)
+	}
+	if tags != ""{
+		params.Add("tag",tags)
+	}
+
+	stations, err := GetStations(params.Encode())
+	if err != nil{
+		return nil, err
+	}
+	prunedStations := pruneStations(stations) // eliminate stations that are reporting down.
+	return prunedStations, err
 }
 
 

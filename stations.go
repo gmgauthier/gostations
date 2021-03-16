@@ -15,7 +15,14 @@ func main(){
 		state 	string
 		tags 	string
 	)
-
+	flag.Usage = func() {
+		fmt.Printf("Usage: \n")
+		fmt.Printf(" gostations ")
+		fmt.Printf(" [-n \"name\"]  [-c \"home country\"]  [-s \"home state\"]  [-t \"ordered,tag,list\"]\n")
+		flag.PrintDefaults()
+		fmt.Printf("  -h (or none)\n")
+		fmt.Printf("\tThis help message\n")
+	}
 	flag.StringVar(&name, "n", "", "Station name (or identifier).")
 	flag.StringVar(&country, "c", "", "Home country.")
 	flag.StringVar(&state, "s", "", "Home state (if in the United States).")
@@ -26,12 +33,10 @@ func main(){
 		flag.Usage()
 	}
 
-	stations, err := GetStations("tag=chicago")
-	if err != nil{
-		fmt.Println(err.Error())
-	}
+	stations, _ := StationSearch(name, country, state, tags)
+	fmt.Println(len(stations))
 	for _, station := range stations {
-		fmt.Printf("\"%s\", %s, %s, %s\n", station.Name, station.Codec, station.Bitrate, station.Url)
+		fmt.Printf("%+v\n", station)
 	}
 
 
