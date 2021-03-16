@@ -32,4 +32,10 @@ func main(){
 		flag.Usage()
 	}
 
+	stations := GetStations("tag=chicago")
+	for station := range(len(stations)) {
+
+	}
+
+
 }
