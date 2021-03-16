@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"math/rand"
 	"net"
@@ -11,20 +10,16 @@ import (
 	"time"
 )
 
-//func BytesToString(b []byte) string {
-//	bh := (*reflect.SliceHeader)(unsafe.Pointer(&b))
-//	sh := reflect.StringHeader{bh.Data, bh.Len}
-//	return *(*string)(unsafe.Pointer(&sh))
-//}
-
-func ResponseToJson(resp io.ReadCloser) interface{} {
-	var jbody interface{}
-	err := json.NewDecoder(resp).Decode(&jbody)
-	if err != nil {
-		panic(err)
-	}
-	return jbody
+type stationRecord struct {
+	Name        string `json:"name"`
+	Codec       string `json:"codec"`
+	Bitrate     json.Number `json:"bitrate"`
+	Countrycode string `json:"countrycode"`
+	Tags        string `json:"tags"`
+	Url         string `json:"url"`
+	Lastcheck   int `json:"lastcheck"`
 }
+
 
 func RandomIP(iplist []net.IP) net.IP {
 	rand.Seed(time.Now().Unix())
@@ -49,15 +44,20 @@ func GetApiHost() string {
 	return apiHost
 }
 
-func GetStations(qstring string) interface{} {
+func GetStations(qstring string) ([]stationRecord, error){
 	urlstr := fmt.Sprintf("https://%s/json/stations/search?%s&limit=100000",GetApiHost(),qstring)
 	resp, err := http.Get(urlstr)
 	if err != nil {
 		log.Printf(err.Error())
 	}
 	defer resp.Body.Close()
-	bodyJson := ResponseToJson(resp.Body)
-	//body, err := io.ReadAll(resp.Body)
-	//bodyString := bytes.NewBuffer(body).String()
-	return bodyJson
+
+	var data []stationRecord
+	err = json.NewDecoder(resp.Body).Decode(&data)
+	if err != nil {
+		return data, err
+	}
+	return data, err
 }
+
+

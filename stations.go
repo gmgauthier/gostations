@@ -7,12 +7,6 @@ import (
 )
 
 func main(){
-	fmt.Println("Configuration values:")
-	fmt.Println("api url: ", api())
-	fmt.Println("player command: ", player())
-	fmt.Println("player options: ", options())
-	fmt.Println("maximum menu items: ", maxitems())
-
 	argCount := len(os.Args[1:])
 
 	var (
@@ -32,9 +26,12 @@ func main(){
 		flag.Usage()
 	}
 
-	stations := GetStations("tag=chicago")
-	for station := range(len(stations)) {
-
+	stations, err := GetStations("tag=chicago")
+	if err != nil{
+		fmt.Println(err.Error())
+	}
+	for _, station := range stations {
+		fmt.Printf("\"%s\", %s, %s, %s\n", station.Name, station.Codec, station.Bitrate, station.Url)
 	}
 
 
