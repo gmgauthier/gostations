@@ -138,4 +138,5 @@ To exit the program entirely, choose the __*Quit__ option, or just hit `[ENTER]`
 ### TODO
 
 * Change the precheck, to do ini file validation once, rather than every time a config value is called for.
+* Add a way to capture favorite selections. Perhaps a preloaded search or something.
 * Add color or a dashboard to the menu and player.
