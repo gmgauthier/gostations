@@ -6,6 +6,13 @@ import (
 	"os"
 )
 
+func precheck(){
+	if !isInstalled(player()){
+		fmt.Printf("%s is either not installed, or not on your $PATH. Cannot continue.\n", player())
+		os.Exit(1)
+	}
+}
+
 func main(){
 	argCount := len(os.Args[1:])
 
@@ -35,9 +42,9 @@ func main(){
 		flag.Usage()
 		os.Exit(0)
 	}
+	precheck()
 
 	stations, _ := StationSearch(name, country, state, tags, notok)
-
 	menu := RadioMenu(stations)
 	err := menu.Run()
 	if err != nil {

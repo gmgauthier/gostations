@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/dixonwille/wmenu/v5"
 	"os"
+
+	"github.com/dixonwille/wmenu/v5"
 )
 
 func Short( s string, i int ) string {
