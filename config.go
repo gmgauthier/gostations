@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -10,11 +9,11 @@ import (
 	"github.com/alyu/configparser"
 )
 
+//str2int
 func str2int(strnum string) int {
 	i, err := strconv.Atoi(strnum)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(2)
+		return 9999
 	}
 	return i
 }
