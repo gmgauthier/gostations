@@ -48,7 +48,7 @@ func GetStations(qstring string) ([]stationRecord, error){
 	urlstr := fmt.Sprintf("https://%s/json/stations/search?%s&limit=%d",GetApiHost(),qstring,maxitems())
 	resp, err := http.Get(urlstr)
 	if err != nil {
-		log.Printf(err.Error())
+		log.Print(err.Error())
 	}
 	defer resp.Body.Close()
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/dixonwille/wmenu/v5"
@@ -30,7 +31,10 @@ func RadioMenu(stations []stationRecord) *wmenu.Menu {
 			fmt.Printf("Streaming: " + opts[0].Text + "\n")
 			stdout, _ := subExecute(player(), options(), val)
 			fmt.Println(stdout)
-			menu.Run()
+			err := menu.Run()
+			if err != nil {
+				log.Fatal("Oops! " + err.Error())
+			}
 			return nil
 		})
 	for _, station := range stations {

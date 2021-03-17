@@ -28,10 +28,12 @@ func configStat(configFile string) string{
 
 	if _, err := os.Stat(configFile); errors.Is(err, os.ErrNotExist) {
 		log.Printf("Your stations config file seems to be missing. A default will be generated.")
-		err = createIniFile(configFile)
-		if err != nil {
-			log.Printf("Erorr creating ini file...")
-			log.Fatal(err.Error())
+		errs := createIniFile(configFile)
+		for _, err := range errs {
+			if err != nil {
+				log.Printf("Erorr: %s", err.Error())
+				log.Fatal("Cannot continue.")
+			}
 		}
 	}
 	return configFile

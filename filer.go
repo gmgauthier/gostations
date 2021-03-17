@@ -6,32 +6,47 @@ import (
 	"path/filepath"
 )
 
-func createDir(fpath string) error {
-	if err := os.Mkdir(filepath.Dir(fpath + string(filepath.Separator)), 0770); err != nil {
-		return err
+func closeFile(file *os.File, errorlist []error) {
+	err := file.Close()
+	if err != nil {
+		errorlist = append(errorlist, err)
 	}
-	return nil
 }
 
-func createIniFile(fpath string) error {
+func createIniFile(fpath string) []error {
 	log.Printf("Creating config file: %s\n", fpath)
+	var errorlist []error
 	if err := os.MkdirAll(filepath.Dir(fpath), 0770); err != nil {
-		return err
+		errorlist = append(errorlist, err)
 	}
 
 	file, err := os.Create(fpath)
 	if err != nil {
-		log.Fatal(err.Error())
-		return err
+		errorlist = append(errorlist, err)
 	}
 
-	_, err = file.Write([]byte("[DEFAULT]\n"))
-	_, err = file.Write([]byte("radio_browser.api=all.api.radio-browser.info\n"))
-	_, err = file.Write([]byte("player.command=mpv\n"))
-	_, err = file.Write([]byte("player.options=--no-video\n"))
-	_, err = file.Write([]byte("menu_items.max=9999\n"))
+	if _, err := file.Write([]byte("[DEFAULT]\n")); err != nil {
+		errorlist = append(errorlist, err)
+	}
+	if _, err := file.Write([]byte("radio_browser.api=all.api.radio-browser.info\n")); err != nil {
+		errorlist = append(errorlist, err)
+	}
+	if _, err := file.Write([]byte("player.command=mpv\n")); err != nil {
+		errorlist = append(errorlist, err)
+	}
+	if _, err := file.Write([]byte("player.options=--no-video\n")); err != nil {
+		errorlist = append(errorlist, err)
+	}
+	if _, err := file.Write([]byte("menu_items.max=9999\n")); err != nil {
+		errorlist = append(errorlist, err)
+	}
 
-	defer file.Close()
+	defer func() {
+		err := file.Close()
+		if err != nil {
+			errorlist = append(errorlist, err)
+		}
+	}()
 
-	return err
+	return errorlist
 }
