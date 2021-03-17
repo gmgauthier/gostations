@@ -6,12 +6,6 @@ import (
 	"path/filepath"
 )
 
-func closeFile(file *os.File, errorlist []error) {
-	err := file.Close()
-	if err != nil {
-		errorlist = append(errorlist, err)
-	}
-}
 
 func createIniFile(fpath string) []error {
 	log.Printf("Creating config file: %s\n", fpath)
