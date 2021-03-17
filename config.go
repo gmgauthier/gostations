@@ -19,9 +19,28 @@ func str2int(strnum string) int {
 	return i
 }
 
+func configStat(configFile string) string{
+	xdgConfigPath := os.Getenv("XDG_CONFIG_HOME")
+	if xdgConfigPath == "" {
+		xdgConfigPath = os.Getenv("HOME")+"/.config"
+	}
+	configFile = xdgConfigPath + "/gostations/" + configFile
+
+	if _, err := os.Stat(configFile); errors.Is(err, os.ErrNotExist) {
+		log.Printf("Your stations config file seems to be missing. A default will be generated.")
+		err = createIniFile(configFile)
+		if err != nil {
+			log.Printf("Erorr creating ini file...")
+			log.Fatal(err.Error())
+		}
+	}
+	return configFile
+}
+
 func Config(option string) (string, error) {
 	configparser.Delimiter = "="
-	configFile := "radiostations.ini"
+	configFile := configStat("radiostations.ini")
+
 	runtimeSection := "DEFAULT"
 
 	config, err := configparser.Read(configFile)
