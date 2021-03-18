@@ -8,7 +8,7 @@ pipelines:
           script:
             - go mod vendor
             - go mod tidy
-            - go test -v
+            - go test -v -cover
             - mkdir build
             - go build -o build/gostations github.com/gmgauthier/gostations
       - step:
