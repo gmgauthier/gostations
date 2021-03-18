@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-var version float32
+var version string
 
 func showVersion(){
 	fmt.Println(version)
