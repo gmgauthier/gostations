@@ -1,7 +1,9 @@
 #!/usr/bin/env sh
 
+GOPATH=$HOME/go
 GOPATH=$GOPATH:$(pwd)
 export GOPATH
+echo $GOPATH
 
 GIT_COMMIT=$(git rev-list -1 HEAD)
 export GIT_COMMIT
