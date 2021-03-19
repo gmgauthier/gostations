@@ -11,6 +11,7 @@ pipelines:
             - go test -v
             - mkdir build
             # go build -o build/gostations github.com/gmgauthier/gostations
+            - echo "Building for $(uname)"
             - ./build.sh
             - export BUILDPATH="build/$(uname)/gostations"
             - curl -X POST --user "${BITBUCKET_USERNAME}:${BITBUCKET_APP_PASSWORD}" "https://api.bitbucket.org/2.0/repositories/${BITBUCKET_REPO_OWNER}/${BITBUCKET_REPO_SLUG}/downloads" --form files=@"${BUILDPATH}"
