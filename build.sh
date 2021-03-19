@@ -3,7 +3,6 @@
 GOPATH=$HOME/go
 GOPATH=$GOPATH:$(pwd)
 export GOPATH
-echo $GOPATH
 
 GIT_COMMIT=$(git rev-list -1 HEAD)
 export GIT_COMMIT
@@ -12,7 +11,11 @@ export CANONICAL_VERSION
 VERSION_STRING="$CANONICAL_VERSION-$GIT_COMMIT"
 export VERSION_STRING
 
+buildpath="build/$(uname)/gostations"
+
 go mod vendor
 go mod tidy
 
-go build -o build/gostations -ldflags "-X main.version=$VERSION_STRING"
+go build -o "$buildpath" -ldflags "-X main.version=$VERSION_STRING"
+
+"$buildpath" -v
