@@ -14,14 +14,15 @@ func isInstalled(name string) bool {
 	return true
 }
 
-func subExecute(program string, args ...string) ([]byte, error) {
+func subExecute(program string, args ...string) {
 	cmd := exec.Command(program, args...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	cmd.Stderr = os.Stdout
 	err := cmd.Run()
 	if err != nil {
 		fmt.Printf("%v\n", err)
 	}
-	return cmd.CombinedOutput()
+	outp, _ := cmd.CombinedOutput()
+	fmt.Println(outp)
 }

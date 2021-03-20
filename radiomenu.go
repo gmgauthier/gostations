@@ -29,8 +29,7 @@ func RadioMenu(stations []stationRecord) *wmenu.Menu {
 			if opts[0].Text == "Quit"{Quit()}
 			val := fmt.Sprintf("%s",opts[0].Value)
 			fmt.Printf("Streaming: " + opts[0].Text + "\n")
-			stdout, _ := subExecute(player(), options(), val)
-			fmt.Println(stdout)
+			subExecute(player(), options(), val)
 			err := menu.Run()
 			if err != nil {
 				log.Fatal("Oops! " + err.Error())
